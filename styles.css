@@ -1,0 +1,20 @@
+/* 
+Emo.te Stylesheet v1.0
+Last Updated: 2016-Nov-03
+Author: William R.A.D. Funk - http://WilliamRobertFunk.com 
+*/
+body
+{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+#engine-wrapper
+{
+	background: #000000;
+    height: 600px;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}

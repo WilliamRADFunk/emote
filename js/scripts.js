@@ -55,9 +55,7 @@ function performEmote(e)
 function mouseDown(e)
 {
 	mouseState = 1;
-	mouseX = e.clientX;
-	if(e.clientY >= Engine.canvas.height) mouseY = Engine.canvas.height - playerSize;
-	else mouseY = e.clientY;
+	getMouseCoordinates(e);
 }
 // Mouse state is inactive (stop moving player)
 function mouseUp(e)
@@ -67,12 +65,23 @@ function mouseUp(e)
 // Mouse has moved, change the new pointer location.
 function mouseMove(e)
 {
-	if(mouseState === 1)
-	{
-		mouseX = e.clientX;
-		if(e.clientY >= Engine.canvas.height) mouseY = Engine.canvas.height - playerSize;
-		else mouseY = e.clientY;
-	}
+	if(mouseState === 1) getMouseCoordinates(e);
+}
+// Calculate mouse position relative to canvas
+function getMouseCoordinates(e)
+{
+	var wrapperElement = document.getElementById("engine-wrapper");
+	var rect = wrapperElement.getBoundingClientRect();
+	var width = wrapperElement.offsetWidth;
+	var height = wrapperElement.offsetHeight;
+	// Get the X coordinate for mouse
+	if(e.clientX <= rect.left) mouseX = 0 + playerSize;
+	else if(e.clientX >= (rect.left + width)) mouseX = width - playerSize;
+	else mouseX = e.clientX - rect.left;
+	// Get the Y coordinate for mouse
+	if(e.clientY >= (rect.top + height)) mouseY = height - playerSize;
+	else if(e.clientY <= rect.top) mouseY = 0 + playerSize;
+	else mouseY = e.clientY - rect.top;
 }
 // Does some smoothing math to transition player toward mouse pointer.
 function movePlayer()
@@ -81,6 +90,8 @@ function movePlayer()
 	var oldPlayerY = player.position.y;
 	var xDiff = mouseX - oldPlayerX;
 	var yDiff = mouseY - oldPlayerY;
+
+	if(Math.abs(xDiff) <= 2 && Math.abs(yDiff) <= 2) return;
 
 	var distance = Math.sqrt(Math.pow(mouseX-oldPlayerX,2) + Math.pow(mouseY-oldPlayerY,2));
 	var directionX = ((xDiff != 0) ? (xDiff / distance) : 0);

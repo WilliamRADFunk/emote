@@ -68,24 +68,32 @@ Engine.Scene = function()
 	};
 };
 // Engine's update cycle
-Engine.update = function()
+Engine.update = function(timestamp)
 {
-	context.clearRect(0, 0, Engine.canvas.width, Engine.canvas.height);
-	if(mouseState === 1)
+	if(!start) start = timestamp;
+	var progress = timestamp - start;
+	
+	if(progress >= (1000/FPS))
 	{
-		movePlayer();
-	}
-	for(var i = 0, j = 0; i < extraneous.length - j; i++)
-	{
-		if(extraneous[i].colorA <= 0)
+		context.clearRect(0, 0, Engine.canvas.width, Engine.canvas.height);
+		if(mouseState === 1)
 		{
-			extraneous.splice(i, 1);
-			j++;
-			continue;
+			movePlayer();
 		}
-		extraneous[i].fade(0.001);
+		for(var i = 0, j = 0; i < extraneous.length - j; i++)
+		{
+			if(extraneous[i].colorA <= 0)
+			{
+				extraneous.splice(i, 1);
+				j++;
+				continue;
+			}
+			extraneous[i].fade(0.001);
+		}
+		scene.render();
+		start = null;
 	}
-	scene.render();
+	window.requestAnimationFrame(Engine.update);
 };
 // Engine's initiating function.
 Engine.run = function()

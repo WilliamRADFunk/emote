@@ -5,6 +5,7 @@ Author: William R.A.D. Funk - http://WilliamRobertFunk.com
 */
 
 var FPS = 60;
+var start = null;
 var context;
 var centerX;
 var centerY;
@@ -14,7 +15,7 @@ var mouseState = 0;
 var scene;
 var player;
 var playerSize = 5;
-var playerSpeed = 2.5;
+var playerSpeed = 3.5;
 var extraneous = [];
 
 // Canvas setup and Engine instigation.
@@ -39,7 +40,8 @@ function init()
 	document.addEventListener("mousemove", mouseMove, false);
 
 	// Instigate the rendering loop.
-	setInterval(Engine.run, (1000/FPS)); //Change FPS at top to alter speed. Lower is slower.
+	window.requestAnimationFrame(Engine.update);
+	//setInterval(Engine.run, (1000/FPS)); //Change FPS at top to alter speed. Lower is slower.
 }
 // Receive emote command and perform its effect.
 function performEmote(e)
